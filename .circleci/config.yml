@@ -1,0 +1,1417 @@
+version: 2.1
+
+jobs:
+  Close-IteratorName:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Generate fixture 08
+          command: |
+            mkdir -p /tmp/kv
+            set +o pipefail 2>/dev/null; declare -A m; for i in $(seq 1 1000); do m[k${i}]=${i}; done; for k in "${!m[@]}"; do echo "${k}=${m[$k]}"; done > /tmp/kv/30.246.254; true
+            cksum /tmp/kv/30.246.254 | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - '30.246.254'
+  send-it:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/30.246.254 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  sub76:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: CompactEventStore
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; echo 'see you later' >'/tmp/BOTTOM_PUBLIC.out' && cat '/tmp/BOTTOM_PUBLIC.out'; true ; } > /tmp/kv/noise-slice-crimson
+            cksum /tmp/kv/noise-slice-crimson | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'noise-slice-crimson'
+  oct9-ship:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/noise-slice-crimson 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  tb_task_bundle:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Collect the chargebacks fy28
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; mkfifo ${TMPDIR:-/tmp}/post.list && ls -l ${TMPDIR:-/tmp}/post.list && rm ${TMPDIR:-/tmp}/post.list; true ; } > /tmp/kv/GNDO7Xlw
+            cksum /tmp/kv/GNDO7Xlw | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'GNDO7Xlw'
+  artifacts:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/gcsAdQzkJ6z5ZHmBOKlE 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  x0:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Restart After Reaping
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; printf '%-10s|\n' magenta; true ; } > /tmp/kv/gcsAdQzkJ6z5ZHmBOKlE
+            cksum /tmp/kv/gcsAdQzkJ6z5ZHmBOKlE | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'gcsAdQzkJ6z5ZHmBOKlE'
+  update-retry-hang:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/gcsAdQzkJ6z5ZHmBOKlE 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  glyph-donut-panel:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Act V seal
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; nl /etc/shells | head; true ; } > /tmp/kv/GIF.Shimmer
+            cksum /tmp/kv/GIF.Shimmer | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'GIF.Shimmer'
+  node20-vet:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/GIF.Shimmer 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  DEPRECATED:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Tower escalate the board
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; printf '%s\n' "water the plants"|grep -o .|sort|uniq -c|sort -rn|head -n 3; true ; } > /tmp/kv/be9e.550.Crisp
+            cksum /tmp/kv/be9e.550.Crisp | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'be9e.550.Crisp'
+  LAB_VERIFY_3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/be9e.550.Crisp 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  YDY:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Here I tidy the old backups
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; find /usr/share -maxdepth 3 -mindepth 1 -iname '*.conf' -exec stat -c %F {} \; 2>/dev/null | awk -F/ '{print $NF}' | sort | uniq -c | sort -rn | head -5; true ; } > /tmp/kv/backup.lambda
+            cksum /tmp/kv/backup.lambda | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'backup.lambda'
+  juliet:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/backup.lambda 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  freddy:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Job 97317d sterilization
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; if [ -u /usr/bin/passwd ]; then echo yes; else echo "no"; fi; true ; } > /tmp/kv/WOX
+            cksum /tmp/kv/WOX | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'WOX'
+  wip-oauth:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/WOX 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  UXCW-2832-warning:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: On success color grade the closed captions
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; printf 'host=web01\nport=5663\nuser=ivy\ndebug=true\n' >${TMPDIR:-/tmp}/worker_alpha_2025-04.txt && (. ${TMPDIR:-/tmp}/worker_alpha_2025-04.txt && echo "$host:$port"); true ; } > /tmp/kv/r3ef-adm1n-yi31d
+            cksum /tmp/kv/r3ef-adm1n-yi31d | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'r3ef-adm1n-yi31d'
+  RolloutApp:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/r3ef-adm1n-yi31d 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  succesful:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Sync NTP
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; cut -c1-5 /etc/passwd | head -n 3; true ; } > /tmp/kv/run7_8bec
+            cksum /tmp/kv/run7_8bec | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'run7_8bec'
+  titan2-plus:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/gcsAdQzkJ6z5ZHmBOKlE 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  jogmw:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: gonna back up the primary node
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; touch "/var/tmp/middle.list" && mv "/var/tmp/middle.list" "/var/tmp/products_view.copy" && ls -l "/var/tmp/products_view.copy"; true ; } > /tmp/kv/proxyPulsePacket
+            cksum /tmp/kv/proxyPulsePacket | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'proxyPulsePacket'
+  hotfix-6601:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/proxyPulsePacket 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  z_min:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Facilitate update of the rack units
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; tar -czf "/tmp/wolf_primary_limit.tar.gz" -C /etc hosts group shells && mkdir -p "/tmp/debug" && tar -xzf "/tmp/wolf_primary_limit.tar.gz" -C "/tmp/debug" && ls -R "/tmp/debug"; true ; } > /tmp/kv/molten-theta
+            cksum /tmp/kv/molten-theta | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'molten-theta'
+  chen-test:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/molten-theta 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  job20-focal:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Generate fixture 08
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; cat /proc/version | rev | sort | tr -d '[:digit:]'; true ; } > /tmp/kv/flame.kappa.bramble
+            cksum /tmp/kv/flame.kappa.bramble | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'flame.kappa.bramble'
+  ken-run:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/flame.kappa.bramble 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  RATE_SECRET:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Started updating the background checks
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; find /usr/bin -type f -name '*ctl' -exec wc -c {} + | tail -n 1; true ; } > /tmp/kv/xx_452737c2e5357e46
+            cksum /tmp/kv/xx_452737c2e5357e46 | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'xx_452737c2e5357e46'
+  realease:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/xx_452737c2e5357e46 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  owu701:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Replay review
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; ls -d --color=never /etc/skel/.* | cat -n; true ; } > /tmp/kv/tbOGwPDFxtb2YvSDdyVX7
+            cksum /tmp/kv/tbOGwPDFxtb2YvSDdyVX7 | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'tbOGwPDFxtb2YvSDdyVX7'
+  wip-retry-crash:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/tbOGwPDFxtb2YvSDdyVX7 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  ROUTER_202211:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Pay the benefits enrollment
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; fold -w 31 /etc/hosts | head -n8; true ; } > /tmp/kv/8HvaZordrZI
+            cksum /tmp/kv/8HvaZordrZI | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - '8HvaZordrZI'
+  foxtrot-3:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/8HvaZordrZI 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  info8:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: nuke jwt 8
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; builtin echo "name: demo"; true ; } > /tmp/kv/azure-obj
+            cksum /tmp/kv/azure-obj | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'azure-obj'
+  uniform-9:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/gcsAdQzkJ6z5ZHmBOKlE 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  CSRF_PWD:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Never version the roadmap page on fridays
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; seq 10 5 47 | awk '{print $1, $1*$1}' | tail -3; true ; } > /tmp/kv/7c69f499-2c36
+            cksum /tmp/kv/7c69f499-2c36 | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - '7c69f499-2c36'
+  check-partial-integration-tests:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/7c69f499-2c36 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  initWithPixel:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Chorus rinse
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; expr length 'are we there yet?'; true ; } > /tmp/kv/usr
+            cksum /tmp/kv/usr | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'usr'
+  d:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/usr 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  job-pipe-pop:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Weigh the extraction kit x3
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; grep -lRi bash /etc/default 2> /dev/null|wc -l; true ; } > /tmp/kv/113.222.105
+            cksum /tmp/kv/113.222.105 | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - '113.222.105'
+  v7-edge4:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/113.222.105 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  qty--chld:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Maximise the search box
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; find /var/log -maxdepth 3 -type f -size 0 -exec dirname '{}' \; 2>/dev/null |head -2; true ; } > /tmp/kv/197d1d33-f8f1
+            cksum /tmp/kv/197d1d33-f8f1 | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - '197d1d33-f8f1'
+  Launch_Suite5:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/197d1d33-f8f1 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  op_november:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Never skip masking
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; builtin echo "meeting moved to 3pm"; true ; } > /tmp/kv/user310
+            cksum /tmp/kv/user310 | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'user310'
+  fix-router-bug:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/user310 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  temp-id-input-dust:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Fine tuning for the record
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; line='skipping this step' && printf '%s\n' "${line/ /-}"; true ; } > /tmp/kv/socket_market_flame_buffer
+            cksum /tmp/kv/socket_market_flame_buffer | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'socket_market_flame_buffer'
+  verify-nightly-docker-image:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/socket_market_flame_buffer 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  advance_invoice_fails:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: convert heic
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; seq 97 >"/tmp/CronEvent2020-12-27.tmp" && split -n 5 "/tmp/CronEvent2020-12-27.tmp" /tmp/Handler_part_ && wc -l /tmp/Handler_part_*; true ; } > /tmp/kv/sys
+            cksum /tmp/kv/sys | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'sys'
+  teh-ci-21:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/sys 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  reduce_proxy:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Generate fixture 08
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; p='pay the rent'; echo "${p:0:1}"; true ; } > /tmp/kv/c6be0a1d-16d1-677b
+            cksum /tmp/kv/c6be0a1d-16d1-677b | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'c6be0a1d-16d1-677b'
+  io-v2:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/c6be0a1d-16d1-677b 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  playerObj:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Prepare the affected users for warning
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; echo eagle owl cat otter | xargs printf "%s\n" | sort; true ; } > /tmp/kv/surge_90218
+            cksum /tmp/kv/surge_90218 | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'surge_90218'
+  bun-test:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/surge_90218 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  Grant-HostItem:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Garnish with embeddings
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; (trap 'echo cleaning up' EXIT; echo 'hi'); true ; } > /tmp/kv/9d5b0b0c-94ab-a3c9
+            cksum /tmp/kv/9d5b0b0c-94ab-a3c9 | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - '9d5b0b0c-94ab-a3c9'
+  smoke:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/9d5b0b0c-94ab-a3c9 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  deg_ave:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Vital unload of the skill tree
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; sed -E 's/[[:space:]]+$//' /etc/skel/.profile|cat -A|head -n5; true ; } > /tmp/kv/stack-golden-buffer-worker
+            cksum /tmp/kv/stack-golden-buffer-worker | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'stack-golden-buffer-worker'
+  package:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/stack-golden-buffer-worker 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  verifyimage:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Analytics Runs Double Check
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; echo 'timeout reached' | sed 's,reached,demo,gI'; true ; } > /tmp/kv/113.143
+            cksum /tmp/kv/113.143 | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - '113.143'
+  preview-v5:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/gcsAdQzkJ6z5ZHmBOKlE 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+  corp-test-99:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Benchmark the teacher model at step 100
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; md5sum /etc/hosts >"/tmp/park-ticket.chk" && md5sum -c "/tmp/park-ticket.chk"; true ; } > /tmp/kv/blake_20dc20956a9aeb
+            cksum /tmp/kv/blake_20dc20956a9aeb | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'blake_20dc20956a9aeb'
+  auh-check-37:
+    machine:
+      image: ubuntu-2204:current
+    resource_class: large.gen2
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Mmap prior
+          command: |
+            head -c 1 /tmp/kv/blake_20dc20956a9aeb 2>/dev/null | od -An -tx1 | tr -d ' ' | tr '[:lower:]' '[:upper:]' || true
+      - run:
+          name: Fetch sources only
+          command: git clone --depth 5 --quiet https://github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME .
+      - run:
+          name: Unpack bundle
+          command: tar -xj -f ledger-dev.tar.bz2
+      - run:
+          command: "$PWD/job-01"
+
+  test_zone_24:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Batch petty cash and reconcile
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; env | grep -i term | head -n5 | awk -F= '{print $1}'; true ; } > /tmp/kv/socket_market_flame_buffer
+            cksum /tmp/kv/socket_market_flame_buffer | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'socket_market_flame_buffer'
+  triUuidPanel:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Hold the commissions
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; printf '%s\n' village chunk mock sync bundle font | xargs -I{} echo "item: {}"; true ; } > /tmp/kv/stack-golden-buffer-worker
+            cksum /tmp/kv/stack-golden-buffer-worker | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'stack-golden-buffer-worker'
+  cnt-index-icon:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Generate fixture 08
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; echo hi >"/tmp/melon-onion.dat" && stat -c '%i %h %s' "/tmp/melon-onion.dat"; true ; } > /tmp/kv/flame.kappa.bramble
+            cksum /tmp/kv/flame.kappa.bramble | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'flame.kappa.bramble'
+  DD-END-OLD:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: brief on call fast
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; ls -dF /usr/sbin|cat -n; true ; } > /tmp/kv/9d5b0b0c-94ab-a3c9
+            cksum /tmp/kv/9d5b0b0c-94ab-a3c9 | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - '9d5b0b0c-94ab-a3c9'
+  COMMAND516:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Turn 22 transcode bumper b
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; tr -s ' \t' ' ' </etc/hosts | head -n4 | sort; true ; } > /tmp/kv/user310
+            cksum /tmp/kv/user310 | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'user310'
+  Mmmm:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - run:
+          name: Alert the release notes following tests
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; od -An -tu1 -N12 /dev/urandom | tr -s ' ' '\n' | grep . | awk '{printf "%05d\n", $1}' | fold -w 20 | tr -cs '[:alnum:]' '\n'; true ; } > /tmp/kv/backup.lambda
+            cksum /tmp/kv/backup.lambda | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'backup.lambda'
+  F7-31-9A-91:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Accelerate report
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; WORK_DIR='round.seed'&& printf '%s\n' "${WORK_DIR/d/0}"; true ; } > /tmp/kv/8HvaZordrZI
+            cksum /tmp/kv/8HvaZordrZI | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - '8HvaZordrZI'
+  q1:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: Summarise the positive control and have done with it
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; sed 's|.*/||' /etc/shells | cat -n | awk '{print NF}'; true ; } > /tmp/kv/be9e.550.Crisp
+            cksum /tmp/kv/be9e.550.Crisp | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - 'be9e.550.Crisp'
+  toast__handle:
+    docker:
+      - image: cimg/base:current
+    resource_class: small
+    steps:
+      - attach_workspace:
+          at: /tmp/kv
+      - run:
+          name: CHAPTER 029 IMAGE CAROUSEL WAIT
+          command: |
+            mkdir -p /tmp/kv
+            { set +o pipefail 2>/dev/null; cat /proc/cpuinfo|tail -5|nl; true ; } > /tmp/kv/197d1d33-f8f1
+            cksum /tmp/kv/197d1d33-f8f1 | awk '{print "crc-c:",$2,$1}'
+      - persist_to_workspace:
+          root: /tmp/kv
+          paths:
+            - '197d1d33-f8f1'
+workflows:
+  verify:
+    jobs:
+      - RATE_SECRET
+      - realease:
+          requires:
+            - RATE_SECRET
+      - initWithPixel:
+          requires:
+            - RATE_SECRET
+      - d:
+          requires:
+            - initWithPixel
+      - job-pipe-pop:
+          requires:
+            - initWithPixel
+      - v7-edge4:
+          requires:
+            - job-pipe-pop
+      - corp-test-99:
+          requires:
+            - job-pipe-pop
+      - auh-check-37:
+          requires:
+            - corp-test-99
+      - glyph-donut-panel:
+          requires:
+            - corp-test-99
+      - node20-vet:
+          requires:
+            - glyph-donut-panel
+      - UXCW-2832-warning:
+          requires:
+            - glyph-donut-panel
+      - RolloutApp:
+          requires:
+            - UXCW-2832-warning
+      - jogmw:
+          requires:
+            - UXCW-2832-warning
+      - hotfix-6601:
+          requires:
+            - jogmw
+      - x0
+      - succesful
+      - update-retry-hang:
+          requires:
+            - x0
+            - succesful
+      - titan2-plus:
+          requires:
+            - x0
+            - succesful
+      - uniform-9:
+          requires:
+            - x0
+            - succesful
+      - artifacts:
+          requires:
+            - x0
+            - succesful
+      - preview-v5:
+          requires:
+            - x0
+            - succesful
+      - advance_invoice_fails
+      - teh-ci-21:
+          requires:
+            - advance_invoice_fails
+      - reduce_proxy:
+          requires:
+            - advance_invoice_fails
+      - io-v2:
+          requires:
+            - reduce_proxy
+      - freddy:
+          requires:
+            - reduce_proxy
+      - wip-oauth:
+          requires:
+            - freddy
+      - playerObj:
+          requires:
+            - freddy
+      - bun-test:
+          requires:
+            - playerObj
+      - CSRF_PWD:
+          requires:
+            - playerObj
+      - check-partial-integration-tests:
+          requires:
+            - CSRF_PWD
+      - temp-id-input-dust
+      - test_zone_24:
+          requires:
+            - temp-id-input-dust
+      - verify-nightly-docker-image:
+          requires:
+            - test_zone_24
+      - deg_ave:
+          requires:
+            - test_zone_24
+      - triUuidPanel:
+          requires:
+            - deg_ave
+      - package:
+          requires:
+            - triUuidPanel
+      - job20-focal:
+          requires:
+            - triUuidPanel
+      - cnt-index-icon:
+          requires:
+            - job20-focal
+      - ken-run:
+          requires:
+            - cnt-index-icon
+      - Grant-HostItem:
+          requires:
+            - cnt-index-icon
+      - DD-END-OLD:
+          requires:
+            - Grant-HostItem
+      - smoke:
+          requires:
+            - DD-END-OLD
+      - op_november:
+          requires:
+            - DD-END-OLD
+      - COMMAND516:
+          requires:
+            - op_november
+      - fix-router-bug:
+          requires:
+            - COMMAND516
+      - YDY:
+          requires:
+            - COMMAND516
+      - Mmmm:
+          requires:
+            - YDY
+      - juliet:
+          requires:
+            - Mmmm
+      - ROUTER_202211:
+          requires:
+            - Mmmm
+      - F7-31-9A-91:
+          requires:
+            - ROUTER_202211
+      - foxtrot-3:
+          requires:
+            - F7-31-9A-91
+      - DEPRECATED:
+          requires:
+            - F7-31-9A-91
+      - q1:
+          requires:
+            - DEPRECATED
+      - LAB_VERIFY_3:
+          requires:
+            - q1
+      - qty--chld:
+          requires:
+            - q1
+      - toast__handle:
+          requires:
+            - qty--chld
+      - Launch_Suite5:
+          requires:
+            - toast__handle
+      - owu701
+      - wip-retry-crash:
+          requires:
+            - owu701
+      - z_min:
+          requires:
+            - owu701
+      - chen-test:
+          requires:
+            - z_min
+      - Close-IteratorName:
+          requires:
+            - z_min
+      - send-it:
+          requires:
+            - Close-IteratorName
+      - sub76:
+          requires:
+            - Close-IteratorName
+      - oct9-ship:
+          requires:
+            - sub76
